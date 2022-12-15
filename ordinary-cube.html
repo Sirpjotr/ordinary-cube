@@ -3,45 +3,45 @@
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 
-    <script>
-        AFRAME.registerComponent('soundhandler', {
-            tick: function () {
-                   var entity = document.querySelector('#audio1');
+    
 
-                   if (document.querySelector('a-marker').object3D.visible == true){
-                     entity.components.sound.playSound();
-                   } else {
-                    entity.components.sound.pauseSound();
-                   }
-             }
-        });
-        </script>
 
-<script>
-    AFRAME.registerComponent('vidhandler', {
-        // ...
-        init: function () {
-            this.toggle = false;
-            this.vid = document.querySelector("#audio1")
-            this.vid.pause();
-        },
-        tick: function () {
-            if (this.el.object3D.visible == true) {
-                if (!this.toggle) {
-                    this.toggle = true;
-                    this.vid.play();
-                }
-            } else {
-                this.toggle = false;
-                this.vid.pause();
-            }
-        }
-    });
-</script>
 
     <body style="margin : 0px; overflow: hidden;">
 
         <a-scene arjs embedded>
+            <script>
+                document.addEventListener("DOMContentLoaded", () =>{
+                    let marker = document.querySelector("#B");
+                    let sound = document.querySelector("#audio1");
+            
+                    marker.addEventListener('markerFound', function(){
+                        var markerId = marker.id;
+                        sound.play();
+                    });
+            
+                    marker.addEventListener('markerLost', function(){
+                        var markerId = marker.id;
+                        sound.pause();
+                    });
+                });   
+            </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", () =>{
+                    let marker = document.querySelector("#F");
+                    let video = document.querySelector("#move1");
+        
+                    marker.addEventListener('markerFound', function(){
+                        var markerId = marker.id;
+                        video.play();
+                    });
+        
+                    marker.addEventListener('markerLost', function(){
+                        var markerId = marker.id;
+                        video.pause();
+                    });
+                });   
+            </script>
             <a-assets>
                 <img id="img1" src="image1.jpg">
                 <audio  id="audio1" src ="audio1.mp3" crossorigin="anonymous"></audio>
@@ -55,16 +55,18 @@
                 rotation="-90 0 0"></a-image>
             </a-marker>
 
-            <a-marker type="pattern" url="letterB.patt">
-                <a-image src="#img1"
-                rotation="-90 0 0"></a-image>
+            <a-marker id="B" type="pattern" url="letterB.patt">
                 <a-sound id="sound1" src="#audio1"></a-sound>
             </a-marker>
             
             <a-marker type="pattern" url="letterC.patt">
-                <a-text value="Hello, world!"
+                <a-text value="Привет, мир!"
+                font="custom-msdf.json" 
+                font-image="custom.png"
                 rotation="-90 0 0"
-                position="-0.5 0 0"></a-text>
+                position="-0.7 0 0"
+                negate="false" 
+                ></a-text>
             </a-marker>
 
             <a-marker type="pattern" url="letterD.patt">
